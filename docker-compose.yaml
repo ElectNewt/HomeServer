@@ -83,11 +83,10 @@ services:
   plex:
     container_name: plex
     image: linuxserver/plex
-    network_mode: bridge
     restart: unless-stopped
     environment:
-      - PUID=1000 # user account id on the system
-      - PGID=1000 # group id on the system
+      - PUID=1000 
+      - PGID=1000 
       - TZ=Europe/Dublin
       - UMASK_SET=022
       - VERSION=docker
@@ -105,3 +104,20 @@ services:
       - D:\Server-config\plex\transcode:/transcode # optional
       - D:\Documents\Movies:/data/Movies:ro
       - D:\Documents\Shows:/data/Television:ro
+  nginx:
+    image: nginx
+    container_name: reverseProxy-nginx
+    ports:
+      - 80:80
+    volumes:
+      - D:\Server-config\nginx\default.conf:/etc/nginx/conf.d/default.conf:ro
+    environment:
+      - NGINX_HOST=server.home
+    depends_on:
+      - plex
+      - transmission
+      - sonarr
+      - radarr
+      - jackett
+      - file-browser
+      - netdata

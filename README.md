@@ -34,5 +34,34 @@ Along with `Plex`, a few other apps are included on the compose file:
 - [Transmission](https://github.com/transmission/transmission) Torrent client. `http://localhost:9091`
 
 
+## Reverse proxy 
+To have an easier life and avoid remembering the ports, I configured an [NGINX](https://github.com/nginx/nginx) reverse proxy.
+
+All this information is configured under the file `default.conf` on the repo is located under `config/nginx/default.conf`, but you can locate it anywhere you want. Just remember to point the volume correctly:
+```
+volumes:
+      - D:\Server-config\nginx\default.conf:/etc/nginx/conf.d/default.conf:ro
+```
+
+This will allow to use differnt endpoints for different purposes:
+- `netdata.server.home` -> netdata
+- `files.server.home` -> filebrowser
+- `shows.server.home` -> sonarr
+- `movies.server.home` -> radar
+- `jackett.server.home` -> jacket
+- `torrent.server.home` -> transmission
+- `plex.server.home` -> plex
+
+Note: for this to work you have to modfiy your `hosts` file **in EACH MACHINE you want to use them** with `{ip} subdomain.domain` like for example (replace `127.0.0.1` for your server IP):
+```
+127.0.0.1 server.home
+127.0.0.1 files.server.home
+127.0.0.1 movies.server.home
+127.0.0.1 tv.server.home
+127.0.0.1 jackett.server.home
+127.0.0.1 torrent.server.home
+127.0.0.1 netdata.server.home
+127.0.0.1 plex.server.home
+```
 
 
