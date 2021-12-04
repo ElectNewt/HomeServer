@@ -33,30 +33,30 @@ services:
     image: linuxserver/jackett
   radarr:
     image: linuxserver/radarr
-    container_name: Movies
+    container_name: Movies-radarr
     ports:
-      - "7878:7878" # port mapping
+      - 7878:7878 # port mapping
     volumes:
       - D:\Server-config\radarr:/config # config directory for radarr
       - D:\temp\downloads\complete:/downloads/complete # completed downloads directory from sab
       - D:\temp\downloads:/downloads
       - D:\Documents\Movies:/storage/Movies # where radarr will copy your movies. add as many of these as you need
     environment:
-      TZ: UTC
-      PUID: 501 # set this to the UID of your user
-      PGID: 501 # set this to the GID of your user
+      TZ: Europe/Dublin
+      PUID: 501 
+      PGID: 501 
   sonarr:
     image: linuxserver/sonarr
     container_name: TvShows-sonarr
     ports:
-      - "8989:8989" # port mapping
+      - 8989:8989
     volumes:
       - D:\Server-config\sonarr:/config # sonarr config dir
       - D:\temp\downloads\complete:/downloads/complete # your completed downloads directory from sab
       - D:\temp\downloads:/downloads
-      - D:\Documents\Shows:/storage/TV # where it will copy your files when done. add as many of these as you need
+      - D:\Documents\Shows:/storage/TV # where it will copy your files when done. 
     environment:
-      TZ: UTC
+      TZ: Europe/Dublin
       PUID: 501 # set this to the UID of your user
       PGID: 501 # set this to the GID of your user
 
@@ -65,8 +65,8 @@ services:
     image: linuxserver/transmission
     container_name: torrentClient-transmission
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=501
+      - PGID=501
       - TZ=Europe/Dublin
     ports:
     #webUI
@@ -102,6 +102,6 @@ services:
       - "32469:32469" # (for access to the Plex DLNA Server)
     volumes:
       - D:\Server-config\plex\config:/config
-      - D:\Server-config\plex\transcode:/transcode # this is not strictly necessary, but I've configured Plex to use this directory for transcoding. Should make it easier to backup only the configuration and not transcoding artifacts.
+      - D:\Server-config\plex\transcode:/transcode # optional
       - D:\Documents\Movies:/data/Movies:ro
       - D:\Documents\Shows:/data/Television:ro
