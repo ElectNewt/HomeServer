@@ -1,0 +1,107 @@
+version: '3'
+services:
+  netdata:
+    container_name: serverStats-netdata
+    image: netdata/netdata
+    ports:
+      - 19999:19999
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+  file-browser:
+    image: filebrowser/filebrowser
+    container_name: fileSystem-filebrowser
+    user: 501:501
+    ports:
+      - 20001:80
+    volumes:
+      - D:\Documents:/srv
+      - D:\Server-config\FileBrowser\filebrowser.db:/database.db
+    restart: unless-stopped
+  jackett:
+    container_name: torrentIndexer-jackett
+    restart: unless-stopped
+    ports:
+    - 9117:9117
+    volumes:
+    - D:\Server-config\jackett:/config
+    environment:
+    - PUID=501
+    - PGID=501
+    - TZ=Europe/Dublin
+    image: linuxserver/jackett
+  radarr:
+    image: linuxserver/radarr
+    container_name: Movies
+    ports:
+      - "7878:7878" # port mapping
+    volumes:
+      - D:\Server-config\radarr:/config # config directory for radarr
+      - D:\temp\downloads\complete:/downloads/complete # completed downloads directory from sab
+      - D:\temp\downloads:/downloads
+      - D:\Documents\Movies:/storage/Movies # where radarr will copy your movies. add as many of these as you need
+    environment:
+      TZ: UTC
+      PUID: 501 # set this to the UID of your user
+      PGID: 501 # set this to the GID of your user
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: TvShows-sonarr
+    ports:
+      - "8989:8989" # port mapping
+    volumes:
+      - D:\Server-config\sonarr:/config # sonarr config dir
+      - D:\temp\downloads\complete:/downloads/complete # your completed downloads directory from sab
+      - D:\temp\downloads:/downloads
+      - D:\Documents\Shows:/storage/TV # where it will copy your files when done. add as many of these as you need
+    environment:
+      TZ: UTC
+      PUID: 501 # set this to the UID of your user
+      PGID: 501 # set this to the GID of your user
+
+  # torrent client
+  transmission:
+    image: linuxserver/transmission
+    container_name: torrentClient-transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Dublin
+    ports:
+    #webUI
+      - "9091:9091/tcp"
+    #DataPorts
+      - "51413:51413/tcp"
+      - "51413:51413/udp"
+    volumes:
+      - D:\Server-config\transmission:/config
+      - D:\temp\downloads:/downloads
+      - D:\temp\downloads\complete:/downloads/complete
+      - D:\temp\downloads\incomplete:/downloads/incomplete
+    restart: unless-stopped
+  plex:
+    container_name: plex
+    image: linuxserver/plex
+    network_mode: bridge
+    restart: unless-stopped
+    environment:
+      - PUID=1000 # user account id on the system
+      - PGID=1000 # group id on the system
+      - TZ=Europe/Dublin
+      - UMASK_SET=022
+      - VERSION=docker
+    ports:
+      - "32400:32400" # (for access to the Plex Media Server) [required]
+      - "3005:3005" # (for controlling Plex Home Theater via Plex Companion)
+      - "8324:8324" # (for controlling Plex for Roku via Plex Companion)
+      - "32410:32410/udp" # (for current GDM network discovery)
+      - "32412:32412/udp" # (for current GDM network discovery)
+      - "32413:32413/udp" # (for current GDM network discovery)
+      - "32414:32414/udp" # (for current GDM network discovery)
+      - "32469:32469" # (for access to the Plex DLNA Server)
+    volumes:
+      - D:\Server-config\plex\config:/config
+      - D:\Server-config\plex\transcode:/transcode # this is not strictly necessary, but I've configured Plex to use this directory for transcoding. Should make it easier to backup only the configuration and not transcoding artifacts.
+      - D:\Documents\Movies:/data/Movies:ro
+      - D:\Documents\Shows:/data/Television:ro
