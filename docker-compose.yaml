@@ -12,7 +12,6 @@ services:
   file-browser:
     image: filebrowser/filebrowser
     container_name: fileSystem-filebrowser
-    user: 501:501
     ports:
       - 20001:80
     volumes:
@@ -28,8 +27,7 @@ services:
     volumes:
     - D:\Server-config\prowlarr:/config
     environment:
-    - 501:501
-    - TZ=Europe/Dublin
+      TZ: Europe/Dublin
   radarr:
     image: linuxserver/radarr
     container_name: Movies-radarr
@@ -42,8 +40,6 @@ services:
       - D:\Documents\Movies:/storage/Movies # where radarr will copy your movies. add as many of these as you need
     environment:
       TZ: Europe/Dublin
-      PUID: 501 
-      PGID: 501 
   sonarr:
     image: linuxserver/sonarr
     container_name: TvShows-sonarr
@@ -56,17 +52,26 @@ services:
       - D:\Documents\Shows:/storage/TV # where it will copy your files when done. 
     environment:
       TZ: Europe/Dublin
-      PUID: 501 # set this to the UID of your user
-      PGID: 501 # set this to the GID of your user
 
+  #note: readarr still on pre-alpha, this version is from 2021-12-17 10:15:38
+  readarr:
+    image: hotio/readarr:nightly-ef5a837
+    container_name: books-readarr
+    environment:
+      TZ: Europe/Dublin
+    volumes:
+      - D:\Server-config\readarr:/config
+      - D:\Documents\Books:/books
+      - D:\temp\downloads:/downloads
+    ports:
+      - 8787:8787
+    restart: unless-stopped
   # torrent client
   transmission:
     image: linuxserver/transmission
     container_name: torrentClient-transmission
     environment:
-      - PUID=501
-      - PGID=501
-      - TZ=Europe/Dublin
+      TZ: Europe/Dublin
     ports:
     #webUI
       - "9091:9091/tcp"
@@ -84,11 +89,9 @@ services:
     image: linuxserver/plex
     restart: unless-stopped
     environment:
-      - PUID=1000 
-      - PGID=1000 
-      - TZ=Europe/Dublin
-      - UMASK_SET=022
-      - VERSION=docker
+      TZ: Europe/Dublin
+      UMASK_SET: 022
+      VERSION: docker
     ports:
       - "32400:32400" # (for access to the Plex Media Server) [required]
       - "3005:3005" # (for controlling Plex Home Theater via Plex Companion)
@@ -111,12 +114,25 @@ services:
     volumes:
       - D:\Server-config\nginx\default.conf:/etc/nginx/conf.d/default.conf:ro
     environment:
-      - NGINX_HOST=server.home
+      NGINX_HOST: server.home
     depends_on:
       - plex
       - transmission
       - sonarr
       - radarr
-      - jackett
+      - prowlarr
       - file-browser
       - netdata
+      - readarr
+    # Working on
+  calibre:
+    image: lscr.io/linuxserver/calibre
+    container_name: calibre-books
+    environment:
+      - TZ=Europe/Dublin
+    volumes:
+    - D:\Server-config\Calibre\config:/config
+    ports:
+      - 8080:8080
+      - 8081:8081
+    restart: unless-stopped

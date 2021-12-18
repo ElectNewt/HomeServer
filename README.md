@@ -30,8 +30,15 @@ You can access using the browser on `http://localhost:32400`
 Along with `Plex`, a few other apps are included on the compose file:
 - [Sonarr](https://github.com/Sonarr/Sonarr) to manage TvShows. `http://localhost:8989`
 - [Radarr](https://github.com/Radarr/Radarr) to manage Movies. `http://localhost:7878`
+- [Readarr](https://github.com/Readarr/Readarr) to manage books. `http://localhost:7878`
 - [prowlarr](https://github.com/Prowlarr/Prowlarr) to manage Torrent trackers. `http://localhost:9696`
 - [Transmission](https://github.com/transmission/transmission) Torrent client. `http://localhost:9091`
+
+## Ebook-Manager
+[Calibre](https://github.com/kovidgoyal/calibre) is an e-book manager. It can view, convert, edit and catalog e-books in all of the major e-book formats.
+
+It can be configured along with `Readarr` so synch the books automatically. 
+
 
 
 ## Reverse proxy 
@@ -49,8 +56,10 @@ This will allow to use differnt endpoints for different purposes:
 - `shows.server.home` -> sonarr
 - `movies.server.home` -> radar
 - `prowlarr.server.home` -> prowlarr
+- `books.server.home` -> readarr
 - `torrent.server.home` -> transmission
 - `plex.server.home` -> plex
+- `calibre.server.home` -> calibre
 
 Note: for this to work you have to modfiy your `hosts` file **in EACH MACHINE you want to use them** with `{ip} subdomain.domain` like for example (replace `127.0.0.1` for your server IP):
 ```
@@ -59,9 +68,11 @@ Note: for this to work you have to modfiy your `hosts` file **in EACH MACHINE yo
 127.0.0.1 movies.server.home
 127.0.0.1 tv.server.home
 127.0.0.1 prowlarr.server.home
+127.0.0.1 books.server.home
 127.0.0.1 torrent.server.home
 127.0.0.1 netdata.server.home
 127.0.0.1 plex.server.home
+127.0.0.1 calibre.server.home
 ```
 
 
