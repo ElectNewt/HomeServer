@@ -19,18 +19,17 @@ services:
       - D:\Documents:/srv
       - D:\Server-config\FileBrowser\filebrowser.db:/database.db
     restart: unless-stopped
-  jackett:
-    container_name: torrentIndexer-jackett
+  prowlarr:
+    image: linuxserver/prowlarr:develop
+    container_name: torrentIndexer-prowlarr
     restart: unless-stopped
     ports:
-    - 9117:9117
+    - 9696:9696
     volumes:
-    - D:\Server-config\jackett:/config
+    - D:\Server-config\prowlarr:/config
     environment:
-    - PUID=501
-    - PGID=501
+    - 501:501
     - TZ=Europe/Dublin
-    image: linuxserver/jackett
   radarr:
     image: linuxserver/radarr
     container_name: Movies-radarr

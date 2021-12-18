@@ -30,7 +30,7 @@ You can access using the browser on `http://localhost:32400`
 Along with `Plex`, a few other apps are included on the compose file:
 - [Sonarr](https://github.com/Sonarr/Sonarr) to manage TvShows. `http://localhost:8989`
 - [Radarr](https://github.com/Radarr/Radarr) to manage Movies. `http://localhost:7878`
-- [Jackett](https://github.com/Jackett/Jackett) to manage Torrent trackers. `http://localhost:9117`
+- [prowlarr](https://github.com/Prowlarr/Prowlarr) to manage Torrent trackers. `http://localhost:9696`
 - [Transmission](https://github.com/transmission/transmission) Torrent client. `http://localhost:9091`
 
 
@@ -48,7 +48,7 @@ This will allow to use differnt endpoints for different purposes:
 - `files.server.home` -> filebrowser
 - `shows.server.home` -> sonarr
 - `movies.server.home` -> radar
-- `jackett.server.home` -> jacket
+- `prowlarr.server.home` -> prowlarr
 - `torrent.server.home` -> transmission
 - `plex.server.home` -> plex
 
@@ -58,7 +58,7 @@ Note: for this to work you have to modfiy your `hosts` file **in EACH MACHINE yo
 127.0.0.1 files.server.home
 127.0.0.1 movies.server.home
 127.0.0.1 tv.server.home
-127.0.0.1 jackett.server.home
+127.0.0.1 prowlarr.server.home
 127.0.0.1 torrent.server.home
 127.0.0.1 netdata.server.home
 127.0.0.1 plex.server.home
