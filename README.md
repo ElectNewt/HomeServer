@@ -35,7 +35,8 @@ Along with `Plex`, a few other apps are included on the compose file:
 - [Transmission](https://github.com/transmission/transmission) Torrent client. `http://localhost:9091`
 
 ## Ebook-Manager
-[Calibre](https://github.com/kovidgoyal/calibre) is an e-book manager. It can view, convert, edit and catalog e-books in all of the major e-book formats.
+[Calibre](https://github.com/kovidgoyal/calibre) is an e-book manager. It can view, convert, edit and catalog e-books in all of the major e-book formats. Along with [calibre-web](https://github.com/janeczku/calibre-web) for a nicer experience
+
 
 It can be configured along with `Readarr` so synch the books automatically. 
 
@@ -60,6 +61,7 @@ This will allow to use differnt endpoints for different purposes:
 - `torrent.server.home` -> transmission
 - `plex.server.home` -> plex
 - `calibre.server.home` -> calibre
+- `calibreweb.server.home` -> calibre
 
 Note: for this to work you have to modfiy your `hosts` file **in EACH MACHINE you want to use them** with `{ip} subdomain.domain` like for example (replace `127.0.0.1` for your server IP):
 ```
@@ -73,6 +75,7 @@ Note: for this to work you have to modfiy your `hosts` file **in EACH MACHINE yo
 127.0.0.1 netdata.server.home
 127.0.0.1 plex.server.home
 127.0.0.1 calibre.server.home
+127.0.0.1 calibreweb.server.home
 ```
 
 

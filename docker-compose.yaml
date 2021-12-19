@@ -129,10 +129,22 @@ services:
     image: lscr.io/linuxserver/calibre
     container_name: calibre-books
     environment:
-      - TZ=Europe/Dublin
+      TZ: Europe/Dublin
     volumes:
-    - D:\Server-config\Calibre\config:/config
+    - D:\Server-config\calibre\config:/config
+    - D:\Documents\Books:/books
     ports:
       - 8080:8080
       - 8081:8081
+    restart: unless-stopped
+  calibreweb:
+    image: lscr.io/linuxserver/calibre-web
+    container_name: calibreweb-books
+    environment:
+      TZ: Europe/Dublin
+    volumes:
+    - D:\Server-config\calibre\config:/config
+    - D:\Documents\Books:/books
+    ports:
+      - 8083:8083
     restart: unless-stopped
