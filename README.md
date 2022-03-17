@@ -30,12 +30,12 @@ You can access using the browser on `http://localhost:32400`
 Along with `Plex`, a few other apps are included on the compose file:
 - [Sonarr](https://github.com/Sonarr/Sonarr) to manage TvShows. `http://localhost:8989`
 - [Radarr](https://github.com/Radarr/Radarr) to manage Movies. `http://localhost:7878`
-- [Readarr](https://github.com/Readarr/Readarr) to manage books. `http://localhost:7878`
+- [Readarr](https://github.com/Readarr/Readarr) to manage books. `http://localhost:8787`
 - [prowlarr](https://github.com/Prowlarr/Prowlarr) to manage Torrent trackers. `http://localhost:9696`
 - [Transmission](https://github.com/transmission/transmission) Torrent client. `http://localhost:9091`
 
 ## Ebook-Manager
-[Calibre](https://github.com/kovidgoyal/calibre) is an e-book manager. It can view, convert, edit and catalog e-books in all of the major e-book formats. Along with [calibre-web](https://github.com/janeczku/calibre-web) for a nicer experience
+[Calibre](https://github.com/kovidgoyal/calibre) is an e-book manager. It can view, convert, edit and catalog e-books in all of the major e-book formats. Along with [calibre-web](https://github.com/janeczku/calibre-web) for a nicer experience (user `admin` password `admin123`)
 
 
 It can be configured along with `Readarr` so synch the books automatically. 
