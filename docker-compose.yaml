@@ -84,6 +84,7 @@ services:
       - D:\temp\downloads\complete:/downloads/complete
       - D:\temp\downloads\incomplete:/downloads/incomplete
     restart: unless-stopped
+  # pick only one between Plex, emby y Jellyfin
   plex:
     container_name: plex
     image: linuxserver/plex
@@ -106,6 +107,33 @@ services:
       - D:\Server-config\plex\transcode:/transcode # optional
       - D:\Documents\Movies:/data/Movies:ro
       - D:\Documents\Shows:/data/Television:ro
+  jellyfin:
+    image: linuxserver/jellyfin
+    container_name: jellyfin
+    environment:
+       TZ: Europe/Dublin
+    volumes:
+      - D:\Server-config\jellyfin\config:/config
+      - D:\Server-config\jellyfin\transcode:/transcode
+      - D:\Documents\Shows:/tv
+      - D:\Documents\Movies:/movies
+    ports:
+      - 8096:8096
+      - 8920:8920
+    restart: unless-stopped
+  emby:
+    image: linuxserver/emby
+    container_name: emby
+    environment:
+      - TZ=Europe/Dublin
+    volumes:
+      - D:\Server-config\emby\config:/config
+      - D:\Documents\Shows:/data/tvshows
+      - D:\Documents\Movies:/data/movies
+    ports:
+      - 8097:8096 #change to 8098:8096 in the real world
+      - 8920:8920 #optional
+    restart: unless-stopped
   nginx:
     image: nginx
     container_name: reverseProxy-nginx
