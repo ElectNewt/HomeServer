@@ -1,0 +1,38 @@
+version: '3'
+services: 
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8080:80/tcp"
+    environment:
+      TZ: 'Europe/Dublin'
+      WEBPASSWORD: 'admin'
+    volumes:
+      - /volume1/docker/pihole/config:/etc/pihole
+      - /volume1/docker/pihole/dnsmasq:/etc/dnsmasq.d
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN # Recommended but not required (DHCP needs NET_ADMIN)
+    dns:
+      - 127.0.0.1
+      - 8.8.8.8
+    networks:
+      - default
+    restart: unless-stopped
+  tailscale:
+      privileged: true
+      hostname: tailscale                                          # This will become the tailscale device name
+      network_mode: "host"
+      container_name: tailscale
+      image: tailscale/tailscale:latest
+      volumes:
+          - "/volume1/docker/tailscale/var_lib:/var/lib"        # State data will be stored in this directory
+          - "/volume1/docker/tailscale/tun:/dev/net/tun"        # Required for tailscale to work
+      cap_add:                                               # Required for tailscale to work
+        - net_admin
+        - sys_module
+      command: tailscaled
+      restart: unless-stopped

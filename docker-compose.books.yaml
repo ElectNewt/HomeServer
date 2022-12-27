@@ -1,0 +1,22 @@
+version: '3'
+services:
+  readarr:
+    image: hotio/readarr:nightly-ef5a837
+    container_name: readarr-books
+    environment:
+      TZ: Europe/Dublin
+    volumes:
+      - /volume1/docker/readarr:/config
+      - /volume1/documents/books:/books
+      - /volume1/temporal/downloads:/downloads
+      - /volume1/temporal/downloads/complete:/downloads/complete # your completed downloads directory from sab
+    ports:
+      - "8787:8787"
+    networks:
+      - default
+    restart: unless-stopped
+
+
+networks:
+  default:
+    driver: bridge

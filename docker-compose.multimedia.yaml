@@ -1,0 +1,118 @@
+version: '3'
+services:
+  prowlarr:
+    image: linuxserver/prowlarr:develop
+    container_name: torrentIndexer-prowlarr
+    restart: unless-stopped
+    ports:
+    - "9696:9696"
+    volumes:
+    - /volume1/docker/prowlarr:/config
+    environment:
+      TZ: Europe/Dublin
+    networks:
+      - default
+  radarr:
+    image: linuxserver/radarr
+    container_name: Movies
+    ports:
+      - "7878:7878" # port mapping
+    volumes:
+      - /volume1/docker/radarr:/config # config directory for radarr.
+      - /volume1/temporal/downloads:/downloads
+      - /volume1/temporal/downloads/complete:/downloads/complete # your completed downloads directory from sab
+      - /volume1/documents/movies:/storage/Movies # where radarr will copy your movies. add as many of these as you need
+    environment:
+      TZ:  Europe/Dublin
+    networks:
+      - default
+    restart: unless-stopped
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: TvShows-sonarr
+    ports:
+      - "8989:8989" # port mapping
+    volumes:
+      - /volume1/docker/sonarr:/config # sonarr config dir
+      - /volume1/temporal/downloads:/downloads
+      - /volume1/temporal/downloads/complete:/downloads/complete # your completed downloads directory from sab
+      - /volume1/documents/shows:/storage/TV # where it will copy your files when done. add as many of these as you need
+    environment:
+      TZ: Europe/Dublin
+    networks:
+      - default
+    restart: unless-stopped
+  readarr:
+    image: hotio/readarr:nightly-ef5a837
+    container_name: books-readarr
+    environment:
+      TZ: Europe/Dublin
+    volumes:
+      - /volume1/docker/readarr:/config
+      - /volume1/documents/books:/books
+      - /volume1/temporal/downloads:/downloads
+      - /volume1/temporal/downloads/complete:/downloads/complete # your completed downloads directory from sab
+    ports:
+      - "8787:8787"
+    networks:
+      - default
+    restart: unless-stopped
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - TZ=Europe/Dublin
+    volumes:
+      - /volume1/docker/overserr:/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Dublin
+    volumes:
+      - /volume1/docker/bazarr:/config
+      - /volume1/documents/movies:/movies
+      - /volume1/documents/shows:/tv
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+  transmission:
+    image: linuxserver/transmission
+    container_name: torrentClient-transmission
+    environment:
+      - TZ=Europe/Dublin
+    ports:
+    #webUI
+      - "9091:9091/tcp"
+    #DataPorts
+      - "51413:51413/tcp"
+      - "51413:51413/udp"
+    volumes:
+      - /volume1/docker/transmission:/config
+      - /volume1/temporal/downloads:/downloads
+      - /volume1/temporal/downloads/complete:/downloads/complete
+      - /volume1/temporal/downloads/incomplete:/downloads/incomplete
+    networks:
+      - default
+    restart: unless-stopped
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      
+      - TZ=Europe/Dublin
+    volumes:
+      - /volume1/docker/lidarr:/config
+      - /volume1/documents/music:/music 
+      - /volume1/temporal/downloads:/downloads 
+    ports:
+      - 8686:8686
+
+networks:
+  default:
+    driver: bridge
